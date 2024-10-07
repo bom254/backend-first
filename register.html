@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+
+        body{
+            background-color: #f0f8ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+        }
+
+        .container{
+            background-color: #ffff;
+            padding: 20px;
+            border-radius: 10px 0;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            width: 100%;
+        }
+
+        label{
+            display: block;
+            margin: 2px 0 5px 0;
+            font-weight: 600;
+        }
+
+        input[type = "text"],
+        input[type = "email"],
+        input[type = "password"],
+        input[type = "number"],
+        select{
+            width: 100%;
+            padding: 8px;
+            margin: 2px 0 15px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        .submit {
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+        }
+
+        .submit:hover{
+            background-color: #0056b3;
+        }
+
+        .login-link{
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .login-link:hover{
+            text-decoration: underline;
+        }
+
+        h1{
+            font-size: 40px;
+            font-weight: 300;
+            text-transform: capitalize;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 2px;
+        }
+
+        /* Fixing radio button and label */
+        input[type = "radio"],
+        input[type = "checkbox"]{
+            margin-right: 10px;
+        }
+
+        .inline{
+            display: flex;
+            align-items: center;
+        }
+
+        .inline label{
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <section class="container">
+        <h1>Welcome to Mediplus</h1>
+            <hr>
+            <form id="registration" action="/register" method="POST">
+                <label for="FirstName">First Name</label>
+                <input type="text" name="FirstName" id="firstName" >
+                
+                <label for="LastName">Last Name</label>
+                <input type="text" name="LastName" id="lastName" >
+                
+                <label for="Email">Email</label>
+                <input type="email" name="Email" id="email" >
+                
+                <label for="Password">Password</label>
+                <input type="password" name="Password" id="password" >
+                
+                <label for="ConfirmPassword">Confirm Password</label>
+                <input type="password" name="ConfirmPassword" id="confirmPassword" >
+
+                <label for="age">Enter Your Age: </label>
+                <input type="number" name="age" id="age" >
+
+                <label for="Country">Country:</label>
+                <select id="menu" class="menu" >
+                    <option value="">Select Your Country</option>
+                    <option>Kenya</option>
+                    <option>South Africa</option>
+                    <option>Ghana</option>
+                    <option>Uganda</option>
+                    <option>Nigeria</option>
+                </select>
+
+                <fieldset>
+                    <legend>Gender:</legend>
+                    <div class="inline">
+                        <input type="radio" id="Male" name="Gender" value="Male" class="name">
+                        <label for="Male">Male</label>
+                    </div>
+                    <div class="inline">
+                        <input type="radio" id="Female" name="Gender" value="Female" class="name">
+                        <label for="Female">Female</label>
+                    </div>
+                </fieldset>
+
+                <div class="inline">
+                    <input type="checkbox" name="terms" id="terms">
+                    <label for="terms">I agree to the terms and conditions</label>
+                </div>
+
+                <input type="submit" value="Register" class="submit">
+            </form>
+            <div id="error-message"></div>
+            <br>
+            <a href="login.html" class="login-link">Already have an account? Log in here</a>
+    </section>
+    <script>
+        document.addEventListener('DOMContentLoaded', function(){
+            const form = document.getElementById('registration');
+            form.addEventListener('submit', function(event){
+                event.preventDefault();
+
+                // Clear previous errors
+                document.querySelectorAll('.error').forEach(e => e.remove());
+
+                const firstName = document.getElementById('firstName');
+                const lastName = document.getElementById('lastName');
+                const email = document.getElementById('email');
+                const password = document.getElementById('password');
+                const confirmPassword = document.getElementById('confirmPassword');
+                const age = document.getElementById('age');
+                const menu = document.getElementById('menu');
+                const gender = document.querySelector('input[name="Gender"]:checked');
+                const terms = document.getElementById('terms');
+
+                let valid = true;
+
+                // Validate logic
+                if(firstName.value.trim() === ""){
+                    showError(firstName, 'Please enter your first name');
+                    valid = false;
+                }
+                if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value)) {
+                        showError(email, 'Please enter a valid email');
+                        valid = false;
+                    }
+    
+                    if (password.value.length < 8) {
+                        showError(password, 'Password must be at least 8 characters');
+                        valid = false;
+                    }
+    
+                    if (password.value !== confirmPassword.value) {
+                        showError(confirmPassword, 'Passwords do not match');
+                        valid = false;
+                    }
+    
+                    const ageNum = parseInt(age.value);
+                    if (isNaN(ageNum) || ageNum < 18 || ageNum > 120) {
+                        showError(age, 'Please enter a valid age between 18 and 120');
+                        valid = false;
+                    }
+    
+                    if (!gender) {
+                        showError(document.querySelector('fieldset'), 'Please select your gender');
+                        valid = false;
+                    }
+    
+                    if (!terms.checked) {
+                        showError(terms, 'You must agree to the terms and conditions');
+                        valid = false;
+                    }
+    
+                    if (menu.value === "") {
+                        showError(menu, 'Please select your country');
+                        valid = false;
+                    }
+    
+                    if (valid) {
+                        alert('Registration Successful');
+                        form.submit(); // Submit the form if all validations pass
+                    }
+            });
+            function showError(field, message) {
+                    const error = document.createElement('div');
+                    error.className = 'error';
+                    error.innerText = message;
+                    field.parentNode.insertBefore(error, field.nextSibling);
+                }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LOGIN PAGE</title>
+    <style>
+        h1 {
+             font-size: x-large;
+             font-weight: 200;
+             text-transform: capitalize;
+             font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+             padding: 2px;
+        }
+        body {
+            background-color: #f0f8ff; /* Light blue background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .form_container {
+            background-color: #ffffff; /* White form background */
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .submit {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .submit:hover {
+            background-color: #0056b3;
+        }
+
+        .form-links {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .form-link {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .form-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    
+   <div class="form_container">
+    <h1>Welcome to Mediplus</h1>
+    <hr>
+        
+        <form  id="login" action="/login" method="POST">
+            <label for="Email">Email</label>
+            <input type="email" name="Email" id="email" required>
+            
+            <label for="Password">Password</label>
+            <input type="password" name="password" id="password" required>
+            
+            <input type="submit" value="Login" class="submit">
+        </form>
+        <div class="form-links">          
+            <a href="register.html" class="form-link">Create Account</a>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.getElementById('login');
+            form.addEventListener('submit', function (event) {
+                event.preventDefault();
+                // Clear previous errors
+                document.querySelectorAll('.error').forEach(e => e.remove());
+                const email = document.getElementById('email');
+                const password = document.getElementById('password');
+                let valid = true;
+                if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.value)) {
+                        showError(email, 'Please enter a valid email');
+                        valid = false;
+                    }
+    
+                    if (password.value.length < 8) {
+                        showError(password, 'Password must be at least 8 characters');
+                        valid = false;
+                    }
+                    if (valid) {
+                        alert('Login Successful');
+                        form.submit(); // Submit the form if all validations pass
+                    }
+                });
+                function showError(field, message) {
+                    const error = document.createElement('div');
+                    error.className = 'error';
+                    error.innerText = message;
+                    field.parentNode.insertBefore(error, field.nextSibling);
+                }
+            });
+    </script>
+</body>
+</html>
